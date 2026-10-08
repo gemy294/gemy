@@ -67,6 +67,24 @@
   <!-- QR Code Generator -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
+  <!-- Smart Image Fallback Resolver -->
+  <script>
+    window.addEventListener('error', function(e) {
+      if (e.target && e.target.tagName === 'IMG') {
+        const img = e.target;
+        if (!img.dataset.fallbackTried) {
+          img.dataset.fallbackTried = "1";
+          const src = img.getAttribute('src') || '';
+          if (src.startsWith('assets/')) {
+            img.src = src.replace(/^assets\//, '');
+          } else if (!src.startsWith('http') && !src.startsWith('data:')) {
+            img.src = 'assets/' + src;
+          }
+        }
+      }
+    }, true);
+  </script>
+
   <style>
     body {
       font-family: 'Cairo', sans-serif;
